@@ -20,7 +20,7 @@ jobs:
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
 
       - name: Build Docker images
-        run: docker-compose -f docker/development/docker-compose.yml build
+        run: docker compose -f docker/development/docker-compose.yml build
 
       - name: Deploy to EC2 (Development)
         id: deploy

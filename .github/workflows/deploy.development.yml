@@ -22,7 +22,7 @@ jobs:
       - name: Build Docker images
         run: docker-compose -f docker/development/docker-compose.yml build
 
-      - name: Deploy to EC2
+      - name: Deploy to EC2 (Development)
         id: deploy
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -31,10 +31,10 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          scp -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no -r ./* $USER@$HOST:/path/to/deploy
+          scp -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no -r ./* $USER@$HOST:/home/ec2-user
 
           ssh -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $USER@$HOST << 'EOF'
-            cd /path/to/deploy
+            cd /home/ec2-user
             docker-compose pull
             docker-compose up -d
           EOF

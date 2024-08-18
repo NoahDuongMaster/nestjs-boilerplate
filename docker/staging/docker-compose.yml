@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  web-staging:
+    build:
+      context: ../../
+      dockerfile: docker/staging/Dockerfile
+    image: backend-staging
+    ports:
+      - '8082:8080'
+    environment:
+      - HUSKY=0

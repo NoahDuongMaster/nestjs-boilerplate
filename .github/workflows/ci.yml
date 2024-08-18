@@ -1,0 +1,31 @@
+name: NestJS Boilerplate Builder
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
+      - uses: actions/cache@v3
+        with:
+          # See here for caching with `yarn` https://github.com/actions/cache/blob/main/examples.md#node---yarn or you can leverage caching with actions/setup-node https://github.com/actions/setup-node
+          path: |
+            ~/.npm
+          # Generate a new cache whenever packages or source files change.
+          key: ${{ runner.os }}-nestjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          # If source files changed but packages didn't, rebuild from a prior cache.
+          restore-keys: |
+            ${{ runner.os }}-nestjs-${{ hashFiles('**/package-lock.json') }}-
+      - name: Install depenencies
+        run: yarn install
+      - name: Building NestJS Boilerplate
+        run: yarn build
+        env:
+          HUSKY: 0
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          SWAGGER_ENABLE: true
+          ALLOWED_ORIGINS: http://localhost:8080
+          PORT: 8080
+          STAGE: dev

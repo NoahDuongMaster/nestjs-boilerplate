@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  web-production:
+    build:
+      context: ../../
+      dockerfile: docker/production/Dockerfile
+    image: web-production
+    ports:
+      - '80:80'
+    environment:
+      - HUSKY=0

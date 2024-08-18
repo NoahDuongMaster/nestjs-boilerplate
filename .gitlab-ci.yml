@@ -1,0 +1,12 @@
+image: node:lts
+stages:
+  - build
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+build:
+  stage: build
+  script:
+    - yarn install
+    - yarn build

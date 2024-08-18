@@ -1,11 +1,8 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { CanActivate, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
-
-  canActivate(_: ExecutionContext): boolean {
+  canActivate(): boolean {
     return true;
   }
 }

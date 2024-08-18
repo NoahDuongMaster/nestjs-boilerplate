@@ -1,12 +1,10 @@
-version: '3'
-
 services:
-  web-production:
+  backend-production:
     build:
       context: ../../
       dockerfile: docker/production/Dockerfile
-    image: web-production
+    image: backend-production
     ports:
       - '80:80'
-    environment:
-      - HUSKY=0
+    env_file:
+      - ../../.env

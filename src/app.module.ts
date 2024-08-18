@@ -1,18 +1,19 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { CoreModule } from '@modules/core/core.module';
-import { LoggerMiddleware } from '@middlewares/logger.middleware';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import envConfiguration, {
   envValidationSchema,
 } from '@configurations/env.configuration';
-import { MongooseModule } from '@nestjs/mongoose';
-import { CacheModule } from '@nestjs/cache-manager';
-import { HttpModule } from '@nestjs/axios';
-import { RouterModule } from '@nestjs/core';
-import { HealthModule } from '@modules/health/health.module';
 import { ROUTES } from '@constants/routes.constant';
+import { LoggerMiddleware } from '@middlewares/logger.middleware';
+import { CoreModule } from '@modules/core/core.module';
+import { HealthModule } from '@modules/health/health.module';
+import { HttpModule } from '@nestjs/axios';
+import { CacheModule } from '@nestjs/cache-manager';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { RouterModule } from '@nestjs/core';
+import { MongooseModule } from '@nestjs/mongoose';
+
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [

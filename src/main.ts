@@ -1,21 +1,22 @@
+import { join } from 'path';
+import compression from '@fastify/compress';
+import fastifyCookie from '@fastify/cookie';
+import cors from '@fastify/cors';
+import fastifyCsrf from '@fastify/csrf-protection';
+import helmet from '@fastify/helmet';
+import fastifyStatic from '@fastify/static';
+import { VersioningType } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import cors from '@fastify/cors';
-import helmet from '@fastify/helmet';
-import { VersioningType } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { v4 as uuidv4 } from 'uuid';
-import dayjs from 'dayjs';
-import fastifyCookie from '@fastify/cookie';
-import compression from '@fastify/compress';
-import fastifyCsrf from '@fastify/csrf-protection';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import fastifyStatic from '@fastify/static';
-import { join } from 'path';
+import dayjs from 'dayjs';
+import { v4 as uuidv4 } from 'uuid';
+
+import { AppModule } from './app.module';
 import { FULL_VI_DATE_FORMAT } from './constants/date.constant';
 
 async function bootstrap() {

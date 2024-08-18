@@ -28,4 +28,4 @@ jobs:
           SWAGGER_ENABLE: true
           ALLOWED_ORIGINS: http://localhost:8080
           PORT: 8080
-          STAGE: dev
+          STAGE: prod

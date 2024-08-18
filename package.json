@@ -19,7 +19,13 @@
     "test:debug": "vitest --inspect-brk --inspect --logHeapUsage --threads=false",
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
     "prepare": "node .husky/install.mjs",
-    "postinstall": "node .husky/postinstall.mjs"
+    "postinstall": "node .husky/install.mjs",
+    "build:development": "make build-development",
+    "start:development": "make start-development",
+    "build:staging": "make build-staging",
+    "start:staging": "make start-staging",
+    "build:production": "make build-production",
+    "start:production": "make start-production"
   },
   "dependencies": {
     "@fastify/compress": "^7.0.3",

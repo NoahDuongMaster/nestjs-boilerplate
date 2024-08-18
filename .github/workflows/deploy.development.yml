@@ -1,0 +1,49 @@
+name: Deploy to EC2 (Development)
+
+on:
+  push:
+    branches:
+      - develop_cicd
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get commit message
+        id: get_commit
+        run: |
+          COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
+          echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
+
+      - name: Build Docker images
+        run: docker-compose -f docker/development/docker-compose.yml build
+
+      - name: Deploy to EC2
+        id: deploy
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+          USER: ${{ secrets.EC2_USER }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          scp -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no -r ./* $USER@$HOST:/path/to/deploy
+
+          ssh -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no $USER@$HOST << 'EOF'
+            cd /path/to/deploy
+            docker-compose pull
+            docker-compose up -d
+          EOF
+
+          curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" -d "chat_id=$TELEGRAM_CHAT_ID&text=Deployment%20succeeded%20on%20EC2%0ABranch:%20${{ github.ref }}%0ACommit:%20${{ env.COMMIT_MESSAGE }}%0ACommitter:%20${{ github.actor }}"
+      - name: Notify failure
+        if: failure()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" -d "chat_id=$TELEGRAM_CHAT_ID&text=Deployment%20failed%20on%20EC2%0ABranch:%20${{ github.ref }}%0ACommit:%20${{ env.COMMIT_MESSAGE }}%0ACommitter:%20${{ github.actor }}"
